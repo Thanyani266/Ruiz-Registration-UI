@@ -1,9 +1,35 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap/dist/js/bootstrap.bundle.min"
 import '../App.css'
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { useState } from "react"
+import axios from "axios"
 
 const Register = () => {
+  const [values, setValues] = useState({
+    name: "",
+    email: "",
+    password: ""
+  })
+
+  const [error, setError] = useState(null)
+
+  const navigate = useNavigate()
+
+  const handleChange = (event) => {
+    setValues(prev => ({...prev, [event.target.name]: event.target.value}))
+  }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    try {
+      await axios.post("http://localhost:5001/register", values)
+      navigate('/login')
+    } catch (err) {
+      setError(err.response.data)
+    }
+  }
+
   return (
     <div className='container'>
         <div className='row'>
@@ -22,21 +48,22 @@ const Register = () => {
         <span className="top-bottom-space"><hr /><span className="mx-3">or</span><hr /></span>
       </div>
       <div className='form-box'>
-      <form>
+      <form onSubmit={handleSubmit}>
       <div className="form-group">
-    <input type="text" className="form-control mb-3" id="exampleInputText1" placeholder="Name" />
+    <input type="text" className="form-control mb-3" id="exampleInputText1" placeholder="Name" name="name" onChange={handleChange}/>
   </div>
   <div className="form-group">
-    <input type="email" className="form-control mb-3" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Email" />
+    <input type="email" className="form-control mb-3" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Email" name="email" onChange={handleChange}/>
   </div>
   <div className="form-group">
-    <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Password" />
+    <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Password" name="password" onChange={handleChange}/>
   </div>
   <div className="form-check my-3">
     <input type="checkbox" className="form-check-input" id="exampleCheck1" />
     <label htmlFor="exampleCheck1" className="text-capitalize">remember me</label>
   </div>
   <button type="submit" className="btn btn-dark w-100 rounded-pill">Register</button>
+  {error && <p>{error}</p>} 
 </form>
     <p className="text-center register-question mt-5">Already have an account? <Link to='/login' className="spn">Log in</Link></p>
       </div>
