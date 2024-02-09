@@ -22,16 +22,25 @@ const Register = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    try {
+    axios.post("http://localhost:5001/register", values)
+    .then(res => {
+      if(res.data === "User has been created!"){
+        navigate('/login')
+      }else{
+        setError(res.data)
+      }
+    })
+    .then(err => console.log(err))
+   /**  try {
       await axios.post("http://localhost:5001/register", values)
       navigate('/login')
     } catch (err) {
       setError(err.response.data)
-    }
+    } */
   }
 
   return (
-    <div className='container'>
+    <div className='reg-container container my-3'>
         <div className='row'>
             <div className="col-lg-6 column">
       <div className='logo'>
@@ -48,6 +57,9 @@ const Register = () => {
         <span className="top-bottom-space"><hr /><span className="mx-3">or</span><hr /></span>
       </div>
       <div className='form-box'>
+      {
+        error && <p className="text-danger text-center">{error}</p>
+      }
       <form onSubmit={handleSubmit}>
       <div className="form-group">
     <input type="text" className="form-control mb-3" id="exampleInputText1" placeholder="Name" name="name" onChange={handleChange}/>
@@ -63,7 +75,6 @@ const Register = () => {
     <label htmlFor="exampleCheck1" className="text-capitalize">remember me</label>
   </div>
   <button type="submit" className="btn btn-dark w-100 rounded-pill">Register</button>
-  {error && <p>{error}</p>} 
 </form>
     <p className="text-center register-question mt-5">Already have an account? <Link to='/login' className="spn">Log in</Link></p>
       </div>

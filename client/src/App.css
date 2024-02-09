@@ -1,8 +1,7 @@
-.container {
+.reg-container {
   background: #FFFFFF;
   margin: auto;
   border-radius: 60px;
-  border: 3px solid red;
   overflow: hidden;
 }
 
@@ -138,6 +137,11 @@ text-align: right;
   max-width: 100%;
   height: auto;
   display: none;
+}
+
+.home-container{
+  background-color: #FEC00F;
+  color: #000;
 }
 
 
